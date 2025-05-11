@@ -1,5 +1,8 @@
 package app;
 
+import dao.PatientDAO;
+import model.Patient;
+
 public class Main {
     public static void main(String[] args) {
         Patient newPatient = new Patient("Alice", 30, "Female", "09123456789");

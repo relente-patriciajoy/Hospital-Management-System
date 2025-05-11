@@ -10,8 +10,7 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(int id, String name, int age, String gender, String contact) {
-        this.id = id;
+    public Patient(String name, int age, String gender, String contact) {
         this.name = name;
         this.age = age;
         this.gender = gender;
