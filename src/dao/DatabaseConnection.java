@@ -15,9 +15,10 @@ public class DatabaseConnection {
                 Properties props = new Properties();
                 props.load(new FileInputStream("config.properties"));
 
-                String url = props.getProperty("db.url");
-                String user = props.getProperty("db.user");
-                String password = props.getProperty("db.password");
+                String url = props.getProperty(
+                        "jdbc:sqlserver://PATRICIAJOY\\\\localhost:1433;databaseName=HospitalDB;encrypt=true;trustServerCertificate=true;");
+                String user = props.getProperty("LMS_ADMIN");
+                String password = props.getProperty("122636");
 
                 connection = DriverManager.getConnection(url, user, password);
             } catch (Exception e) {
