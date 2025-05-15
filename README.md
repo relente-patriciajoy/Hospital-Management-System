@@ -1,5 +1,5 @@
 <div align="center">
-   <img width=1536px height=1024px src="./src/assets/logo.png" />
+   <img width=1063px height=380px src="./src/assets/logo.png" />
 
 # **MedAssistant**
 
