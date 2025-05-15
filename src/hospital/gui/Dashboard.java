@@ -2,8 +2,8 @@ package hospital.gui;
 
 import javax.swing.*;
 import java.awt.*;
-import hospital.gui.PatientManagementPanel;
-import hospital.gui.MedicalRecordsPanel;
+// import hospital.gui.PatientManagementPanel;
+// import hospital.gui.MedicalRecordsPanel;
 
 public class Dashboard extends JFrame {
 

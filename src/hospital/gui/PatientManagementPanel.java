@@ -10,8 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import hospital.gui.MedicalRecordsPanel;  // Adjust if your package differs
-import hospital.gui.Dashboard;
+// import hospital.gui.MedicalRecordsPanel;  // Adjust if your package differs
+// import hospital.gui.Dashboard;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -25,7 +25,7 @@ public class PatientManagementPanel extends JPanel {
         setBackground(Color.WHITE);
 
         // Table setup
-        String[] columns = {"ID", "Name", "Age", "Gender", "Contact"};
+        String[] columns = { "ID", "Name", "Age", "Gender", "Contact" };
         tableModel = new DefaultTableModel(columns, 0);
         table = new JTable(tableModel);
         refreshTable();
@@ -139,7 +139,7 @@ public class PatientManagementPanel extends JPanel {
         tableModel.setRowCount(0);
         List<Patient> patients = PatientDAO.getAllPatients();
         for (Patient p : patients) {
-            Object[] row = {p.getId(), p.getName(), p.getAge(), p.getGender(), p.getContact()};
+            Object[] row = { p.getId(), p.getName(), p.getAge(), p.getGender(), p.getContact() };
             tableModel.addRow(row);
         }
     }
