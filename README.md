@@ -17,11 +17,14 @@
 
 <hr>
 
-### Backend:
+<img src="https://img.shields.io/badge/PROGRAMMING%20LANGUAGE-orange?style=for-the-badge&color=e53935" />&nbsp;
+
 > Java
 
-### Frontend:
+ <img src="https://img.shields.io/badge/FRONTEND-orange?style=for-the-badge&color=283593" />&nbsp;
+
 > Java FXML
 
-### Database:
+<img src="https://img.shields.io/badge/DATABASE-green?style=for-the-badge&color=2196F3" />&nbsp;
+
 > SQL Server Management Studio 20
