@@ -16,6 +16,9 @@ public class AppointmentManagementPanel extends JPanel {
     private JTable table;
     private AppointmentDAO appointmentDAO;
 
+    /**
+     * @param appointmentDAO
+     */
     public AppointmentManagementPanel(AppointmentDAO appointmentDAO) {
         this.appointmentDAO = appointmentDAO;
         setLayout(new BorderLayout());
