@@ -28,7 +28,7 @@ public class AppointmentDAO {
         }
     }
 
-    // GET ALL
+    // READ ALL
     public List<Appointment> getAllAppointments() {
         List<Appointment> list = new ArrayList<>();
         String sql = "SELECT * FROM Appointments";
@@ -47,5 +47,34 @@ public class AppointmentDAO {
             e.printStackTrace();
         }
         return list;
+    }
+
+    // UPDATE
+    public boolean updateAppointment(Appointment appt) {
+        String sql = "UPDATE Appointments SET patient_id = ?, doctor_name = ?, appointment_date = ?, status = ? WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, appt.getPatientId());
+            stmt.setString(2, appt.getDoctorName());
+            stmt.setTimestamp(3, Timestamp.valueOf(appt.getAppointmentDate()));
+            stmt.setString(4, appt.getStatus());
+            stmt.setInt(5, appt.getId());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Cancel
+    public boolean cancelAppointment(int id) {
+        String sql = "UPDATE appointments SET status = ? WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "Cancelled");
+            stmt.setInt(2, id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

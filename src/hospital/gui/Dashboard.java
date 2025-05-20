@@ -1,9 +1,11 @@
 package hospital.gui;
 
+import dao.AppointmentDAO;
+import dao.DatabaseConnection;
+
 import javax.swing.*;
 import java.awt.*;
-// import hospital.gui.PatientManagementPanel;
-// import hospital.gui.MedicalRecordsPanel;
+import java.sql.Connection;
 
 public class Dashboard extends JFrame {
 
@@ -42,7 +44,7 @@ public class Dashboard extends JFrame {
 
         // Buttons depending on role
         if (role.equalsIgnoreCase("Doctor")) {
-            sidebar.add(createDashboardButton("View Appointments"));
+            sidebar.add(createAppointmentButton("View Appointments"));
             sidebar.add(createNavigationButton("Manage Patients"));
 
             JButton medicalRecordsButton = createDashboardButton("Medical Records");
@@ -62,9 +64,10 @@ public class Dashboard extends JFrame {
         } else if (role.equalsIgnoreCase("Admin")) {
             sidebar.add(createDashboardButton("Manage Users"));
             sidebar.add(createDashboardButton("System Reports"));
+            sidebar.add(createAppointmentButton("View Appointments"));
             sidebar.add(createNavigationButton("Manage Patients"));
         } else if (role.equalsIgnoreCase("Patient")) {
-            sidebar.add(createDashboardButton("Book Appointment"));
+            sidebar.add(createDashboardButton("Edit Profile"));
             sidebar.add(createDashboardButton("View Medical History"));
         }
 
@@ -107,6 +110,23 @@ public class Dashboard extends JFrame {
         button.addActionListener(e -> {
             if (text.equals("Manage Patients")) {
                 showPanel(new PatientManagementPanel());
+            }
+        });
+
+        return button;
+    }
+
+    private JButton createAppointmentButton(String text) {
+        JButton button = createDashboardButton(text);
+
+        button.addActionListener(e -> {
+            try {
+                Connection conn = DatabaseConnection.getConnection();
+                AppointmentDAO dao = new AppointmentDAO(conn);
+                showPanel(new AppointmentManagementPanel(dao));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Failed to load Appointment Panel");
             }
         });
 

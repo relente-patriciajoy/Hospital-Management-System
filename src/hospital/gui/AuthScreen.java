@@ -67,11 +67,16 @@ public class AuthScreen extends JFrame {
             }
         });
 
-        panel.add(userLabel, gbc); gbc.gridy++;
-        panel.add(username, gbc); gbc.gridy++;
-        panel.add(passLabel, gbc); gbc.gridy++;
-        panel.add(password, gbc); gbc.gridy++;
-        panel.add(loginBtn, gbc); gbc.gridy++;
+        panel.add(userLabel, gbc);
+        gbc.gridy++;
+        panel.add(username, gbc);
+        gbc.gridy++;
+        panel.add(passLabel, gbc);
+        gbc.gridy++;
+        panel.add(password, gbc);
+        gbc.gridy++;
+        panel.add(loginBtn, gbc);
+        gbc.gridy++;
         panel.add(backBtn, gbc);
 
         return panel;
@@ -111,19 +116,27 @@ public class AuthScreen extends JFrame {
 
             if (!name.isEmpty() && !user.isEmpty() && !pass.isEmpty()) {
                 // Simulate successful registration
-                JOptionPane.showMessageDialog(this, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Registration successful!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(this, "Please fill all fields", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
-        panel.add(nameLabel, gbc); gbc.gridy++;
-        panel.add(nameField, gbc); gbc.gridy++;
-        panel.add(userLabel, gbc); gbc.gridy++;
-        panel.add(userField, gbc); gbc.gridy++;
-        panel.add(passLabel, gbc); gbc.gridy++;
-        panel.add(passField, gbc); gbc.gridy++;
-        panel.add(registerBtn, gbc); gbc.gridy++;
+        panel.add(nameLabel, gbc);
+        gbc.gridy++;
+        panel.add(nameField, gbc);
+        gbc.gridy++;
+        panel.add(userLabel, gbc);
+        gbc.gridy++;
+        panel.add(userField, gbc);
+        gbc.gridy++;
+        panel.add(passLabel, gbc);
+        gbc.gridy++;
+        panel.add(passField, gbc);
+        gbc.gridy++;
+        panel.add(registerBtn, gbc);
+        gbc.gridy++;
         panel.add(backBtn, gbc);
 
         return panel;
