@@ -7,7 +7,7 @@ public class WelcomeScreen extends JFrame {
     public WelcomeScreen() {
         setTitle("MedAssistant");
         setSize(1000, 700); // Not full screen
-        setUndecorated(false);  // Allows minimize, maximize, close buttons
+        setUndecorated(false); // Allows minimize, maximize, close buttons
         setExtendedState(JFrame.NORMAL); // Full screen
         setResizable(true); // Allow resizing
         setLocationRelativeTo(null); // Center on screen
