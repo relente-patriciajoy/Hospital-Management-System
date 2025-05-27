@@ -10,7 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-// import hospital.gui.MedicalRecordsPanel;  // Adjust if your package differs
+// import hospital.gui.MedicalRecordsPanel;
 // import hospital.gui.Dashboard;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -28,18 +28,23 @@ public class PatientManagementPanel extends JPanel {
         String[] columns = { "ID", "Name", "Age", "Gender", "Contact" };
         tableModel = new DefaultTableModel(columns, 0);
         table = new JTable(tableModel);
+
+        // Style table
+        table.setRowHeight(28);
+        table.setGridColor(new Color(220, 220, 220));
+        table.setSelectionBackground(new Color(128, 0, 0));
+        table.setSelectionForeground(Color.WHITE);
         refreshTable();
 
         // Double-click to open MedicalRecordsPanel
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // double-click event
+                if (e.getClickCount() == 2) {
                     int selectedRow = table.getSelectedRow();
                     if (selectedRow != -1) {
-                        int patientId = (int) tableModel.getValueAt(selectedRow, 0); // ID in column 0
+                        int patientId = (int) tableModel.getValueAt(selectedRow, 0);
 
-                        // Get top JFrame (Dashboard)
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(PatientManagementPanel.this);
                         if (topFrame instanceof Dashboard) {
                             ((Dashboard) topFrame).showPanel(new MedicalRecordsPanel(patientId));
@@ -50,40 +55,77 @@ public class PatientManagementPanel extends JPanel {
         });
 
         JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180)));
         add(scrollPane, BorderLayout.CENTER);
 
         // Form panel
-        JPanel formPanel = new JPanel(new GridLayout(5, 2, 10, 10));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(128, 0, 0)),
+                "Patient Details"));
+        formPanel.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 12, 8, 12);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        nameField = new JTextField();
-        ageField = new JTextField();
-        genderField = new JTextField();
-        contactField = new JTextField();
+        // Input fields size
+        nameField = new JTextField(20);
+        ageField = new JTextField(10);
+        genderField = new JTextField(10);
+        contactField = new JTextField(20);
 
-        formPanel.add(new JLabel("Name:"));
-        formPanel.add(nameField);
-        formPanel.add(new JLabel("Age:"));
-        formPanel.add(ageField);
-        formPanel.add(new JLabel("Gender:"));
-        formPanel.add(genderField);
-        formPanel.add(new JLabel("Contact:"));
-        formPanel.add(contactField);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        formPanel.add(new JLabel("Name:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(nameField, gbc);
+        gbc.gridx = 2;
+        formPanel.add(new JLabel("Age:"), gbc);
+        gbc.gridx = 3;
+        formPanel.add(ageField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        formPanel.add(new JLabel("Gender:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(genderField, gbc);
+        gbc.gridx = 2;
+        formPanel.add(new JLabel("Contact:"), gbc);
+        gbc.gridx = 3;
+        formPanel.add(contactField, gbc);
 
         add(formPanel, BorderLayout.NORTH);
 
         // Button panel
-        JPanel buttonPanel = new JPanel(new FlowLayout());
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        buttonPanel.setBackground(Color.WHITE);
+
         JButton addBtn = new JButton("Add");
+        addBtn.setBackground(new Color(0, 128, 0));
+        addBtn.setForeground(Color.WHITE);
+        addBtn.setFocusPainted(false);
+        addBtn.setFont(new Font("SansSerif", Font.BOLD, 16));
+        addBtn.setPreferredSize(new Dimension(120, 35));
+
         JButton updateBtn = new JButton("Update");
+        updateBtn.setBackground(new Color(0, 102, 204));
+        updateBtn.setForeground(Color.WHITE);
+        updateBtn.setFocusPainted(false);
+        updateBtn.setFont(new Font("SansSerif", Font.BOLD, 16));
+        updateBtn.setPreferredSize(new Dimension(120, 35));
+
         JButton deleteBtn = new JButton("Delete");
+        deleteBtn.setBackground(new Color(204, 0, 0));
+        deleteBtn.setForeground(Color.WHITE);
+        deleteBtn.setFocusPainted(false);
+        deleteBtn.setFont(new Font("SansSerif", Font.BOLD, 16));
+        deleteBtn.setPreferredSize(new Dimension(120, 35));
 
         buttonPanel.add(addBtn);
         buttonPanel.add(updateBtn);
         buttonPanel.add(deleteBtn);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Event listeners
+        // Action listeners for buttons
         addBtn.addActionListener(e -> {
             Patient patient = new Patient();
             patient.setName(nameField.getText());
