@@ -16,18 +16,18 @@ public class AppointmentManagementPanel extends JPanel {
     private JTable table;
     private AppointmentDAO appointmentDAO;
 
-    /**
-     * @param appointmentDAO
-     */
     public AppointmentManagementPanel(AppointmentDAO appointmentDAO) {
         this.appointmentDAO = appointmentDAO;
         setLayout(new BorderLayout());
+        setBackground(Color.WHITE);
 
         // Input Form
         JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBorder(BorderFactory.createTitledBorder("Appointment Form"));
+        formPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(128, 0, 0)),
+                "Appointment Form"));
+        formPanel.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JLabel lblId = new JLabel("ID:");
@@ -40,11 +40,10 @@ public class AppointmentManagementPanel extends JPanel {
         JLabel lblDate = new JLabel("Appointment Date (yyyy-MM-dd):");
         txtDate = new JTextField(10);
 
-        JButton btnAdd = new JButton("Add Appointment");
-        JButton btnModify = new JButton("Update Appointment");
-        JButton btnCancel = new JButton("Cancel Appointment");
+        JButton btnAdd = styleButton("Add Appointment", new Color(0, 128, 0));
+        JButton btnModify = styleButton("Update Appointment", new Color(0, 102, 204));
+        JButton btnCancel = styleButton("Cancel Appointment", new Color(204, 0, 0));
 
-        // Layout Rows
         gbc.gridx = 0;
         gbc.gridy = 0;
         formPanel.add(lblId, gbc);
@@ -96,13 +95,16 @@ public class AppointmentManagementPanel extends JPanel {
                 return comp;
             }
         };
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setFillsViewportHeight(true);
+        table.setRowHeight(24);
+        table.setGridColor(new Color(200, 200, 200));
+        table.setSelectionBackground(new Color(220, 220, 255));
+
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
         loadAppointments();
 
-        // Table row selection listener
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
                 int selectedRow = table.getSelectedRow();
@@ -113,14 +115,12 @@ public class AppointmentManagementPanel extends JPanel {
             }
         });
 
-        // Add Button
         btnAdd.addActionListener(e -> {
             try {
                 int patientId = Integer.parseInt(txtPatientId.getText().trim());
                 String doctorName = txtDoctorName.getText().trim();
                 LocalDate date = LocalDate.parse(txtDate.getText().trim(), DateTimeFormatter.ISO_LOCAL_DATE);
 
-                String status = "Active";
                 Appointment appt = new Appointment(0, patientId, doctorName, date.atStartOfDay(), "Active");
                 if (appointmentDAO.addAppointment(appt)) {
                     JOptionPane.showMessageDialog(this, "Appointment added.");
@@ -134,7 +134,6 @@ public class AppointmentManagementPanel extends JPanel {
             }
         });
 
-        // Modify Button
         btnModify.addActionListener(e -> {
             if (txtId.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please select an appointment to modify.");
@@ -161,7 +160,6 @@ public class AppointmentManagementPanel extends JPanel {
             }
         });
 
-        // Cancel Button
         btnCancel.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {
@@ -205,5 +203,15 @@ public class AppointmentManagementPanel extends JPanel {
         txtDoctorName.setText("");
         txtDate.setText("");
         table.clearSelection();
+    }
+
+    private JButton styleButton(String text, Color bgColor) {
+        JButton button = new JButton(text);
+        button.setBackground(bgColor);
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setFont(new Font("SansSerif", Font.BOLD, 14));
+        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        return button;
     }
 }
