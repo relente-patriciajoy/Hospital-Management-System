@@ -20,39 +20,72 @@ public class MedicalRecordsPanel extends JPanel {
     public MedicalRecordsPanel(int patientId) {
         this.patientId = patientId;
         setLayout(new BorderLayout());
+        setBackground(new Color(245, 245, 250));
 
-        // Top input form
+        // Top input form panel
         JPanel inputPanel = new JPanel(new GridLayout(4, 2, 10, 10));
-        inputPanel.setBorder(BorderFactory.createTitledBorder("Manage Medical Record"));
+        inputPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder("Manage Medical Record"),
+                BorderFactory.createEmptyBorder(10, 15, 15, 15)));
+        inputPanel.setBackground(Color.WHITE);
 
-        inputPanel.add(new JLabel("Diagnosis:"));
+        // Labels & fields
+        Font labelFont = new Font("Segoe UI", Font.PLAIN, 14);
+        JLabel diagLabel = new JLabel("Diagnosis:");
+        diagLabel.setFont(labelFont);
+        diagLabel.setForeground(new Color(50, 50, 50));
         diagnosisField = new JTextField();
-        inputPanel.add(diagnosisField);
+        diagnosisField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
-        inputPanel.add(new JLabel("Prescription:"));
+        JLabel prescLabel = new JLabel("Prescription:");
+        prescLabel.setFont(labelFont);
+        prescLabel.setForeground(new Color(50, 50, 50));
         prescriptionField = new JTextField();
+        prescriptionField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+        inputPanel.add(diagLabel);
+        inputPanel.add(diagnosisField);
+        inputPanel.add(prescLabel);
         inputPanel.add(prescriptionField);
 
+        // Buttons
         addButton = new JButton("Add Record");
         updateButton = new JButton("Update Selected");
         deleteButton = new JButton("Delete Selected");
 
-        inputPanel.add(addButton);
-        inputPanel.add(updateButton);
-        inputPanel.add(deleteButton);
+        JButton[] buttons = { addButton, updateButton, deleteButton };
+        Color[] btnColors = {
+                new Color(34, 139, 34), // Add
+                new Color(65, 105, 225), // Update
+                new Color(178, 34, 34) // Delete
+        };
+
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].setBackground(btnColors[i]);
+            buttons[i].setForeground(Color.WHITE);
+            buttons[i].setFont(new Font("Segoe UI", Font.BOLD, 14));
+            buttons[i].setFocusPainted(false);
+            inputPanel.add(buttons[i]);
+        }
 
         add(inputPanel, BorderLayout.NORTH);
 
-        // Table for displaying records
+        // Table setup
         tableModel = new DefaultTableModel(new Object[] { "ID", "Date", "Diagnosis", "Prescription" }, 0);
         recordsTable = new JTable(tableModel);
+        recordsTable.setFillsViewportHeight(true);
+        recordsTable.setGridColor(new Color(200, 200, 200));
+        recordsTable.setSelectionBackground(new Color(135, 206, 250)); // Light sky blue
+        recordsTable.setSelectionForeground(Color.BLACK);
+        recordsTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+        recordsTable.getTableHeader().setBackground(new Color(230, 230, 230));
         JScrollPane scrollPane = new JScrollPane(recordsTable);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Medical History"));
         add(scrollPane, BorderLayout.CENTER);
 
         loadRecords();
 
-        // Add button action
+        // Button actions
         addButton.addActionListener((ActionEvent e) -> {
             String diagnosis = diagnosisField.getText();
             String prescription = prescriptionField.getText();
@@ -71,7 +104,6 @@ public class MedicalRecordsPanel extends JPanel {
             }
         });
 
-        // Update button action
         updateButton.addActionListener((ActionEvent e) -> {
             int selectedRow = recordsTable.getSelectedRow();
             if (selectedRow != -1) {
@@ -97,7 +129,6 @@ public class MedicalRecordsPanel extends JPanel {
             }
         });
 
-        // Delete button action
         deleteButton.addActionListener((ActionEvent e) -> {
             int selectedRow = recordsTable.getSelectedRow();
             if (selectedRow != -1) {
@@ -118,7 +149,7 @@ public class MedicalRecordsPanel extends JPanel {
             }
         });
 
-        // Click row to edit
+        // Table row selection to populate fields
         recordsTable.getSelectionModel().addListSelectionListener(e -> {
             int selectedRow = recordsTable.getSelectedRow();
             if (selectedRow != -1) {
