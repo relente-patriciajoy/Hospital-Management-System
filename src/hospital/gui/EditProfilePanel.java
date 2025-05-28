@@ -130,7 +130,8 @@ public class EditProfilePanel extends JPanel {
         saveButton.setForeground(Color.WHITE);
         saveButton.setFont(new Font("SansSerif", Font.BOLD, 16));
         saveButton.setFocusPainted(false);
-        saveButton.setBorder(BorderFactory.createEmptyBorder(10saveButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        saveButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        saveButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         // Final layout
         JPanel centerPanel = new JPanel(new BorderLayout(20, 20));
