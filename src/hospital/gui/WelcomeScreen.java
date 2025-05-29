@@ -1,60 +1,41 @@
 package hospital.gui;
 
-import javax.swing.*;
-import java.awt.*;
+import javafx.animation.PauseTransition;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
-public class WelcomeScreen extends JFrame {
-    private static final long serialVersionUID = 1L;
+public class WelcomeScreen extends Application {
 
-    public WelcomeScreen() {
-        setTitle("MedAssistant");
-        setSize(1000, 700);
-        setUndecorated(false);
-        setExtendedState(JFrame.NORMAL);
-        setResizable(true);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    @Override
+    public void start(Stage primaryStage) {
+        // Load the background image
+        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/assets/logo.png")));
+        imageView.setFitWidth(1000);
+        imageView.setFitHeight(700);
+        imageView.setPreserveRatio(true);
 
-        // Load the background image using classpath
-        Image bannerImage = null;
-        try {
-            bannerImage = new ImageIcon(getClass().getResource("/assets/logo.png")).getImage();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Banner image not found!", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        StackPane root = new StackPane(imageView);
+        Scene scene = new Scene(root, 1000, 700);
 
-        JPanel backgroundPanel = new BackgroundPanel(bannerImage);
-        backgroundPanel.setLayout(new GridBagLayout());
-        setContentPane(backgroundPanel);
+        primaryStage.setTitle("MedAssistant");
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
-        // Timer to switch screens
-        Timer timer = new Timer(2500, e -> {
-            dispose();
-            new RoleSelection();
+        // Pause for 2.5 seconds then switch to RoleSelection
+        PauseTransition pause = new PauseTransition(Duration.seconds(2.5));
+        pause.setOnFinished(event -> {
+            primaryStage.close();
+            new RoleSelection().start(new Stage());
         });
-        timer.setRepeats(false);
-        timer.start();
-
-        setVisible(true);
-    }
-
-    // Inner class to draw the background image
-    static class BackgroundPanel extends JPanel {
-        private static final long serialVersionUID = 1L;
-        private final Image backgroundImage;
-
-        public BackgroundPanel(Image image) {
-            this.backgroundImage = image;
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-        }
+        pause.play();
     }
 
     public static void main(String[] args) {
-        new WelcomeScreen();
+        launch(args);
     }
 }

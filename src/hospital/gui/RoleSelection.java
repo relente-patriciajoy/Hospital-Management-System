@@ -1,110 +1,75 @@
 package hospital.gui;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
-public class RoleSelection extends JFrame {
+public class RoleSelection extends Application {
 
-    public RoleSelection() {
-        setTitle("Select Role");
-        setSize(1000, 700);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-
-        // Main layered panel
-        setContentPane(new BackgroundPanel("/assets/maroon-bg.png"));
-        getContentPane().setLayout(new BorderLayout());
-
-        // Navigation Bar Panel
-        JPanel navbar = new JPanel();
-        navbar.setBackground(new Color(139, 0, 0));
-        navbar.setPreferredSize(new Dimension(getWidth(), 60));
-        navbar.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 15));
-
-        JLabel appTitle = new JLabel("MedAssistant");
-        appTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        appTitle.setForeground(Color.WHITE);
-        navbar.add(appTitle);
-        getContentPane().add(navbar, BorderLayout.NORTH);
+    @Override
+    public void start(Stage primaryStage) {
+        // Navigation Bar
+        HBox navbar = new HBox();
+        navbar.setBackground(new Background(new BackgroundFill(Color.DARKRED, CornerRadii.EMPTY, Insets.EMPTY)));
+        navbar.setPadding(new Insets(15));
+        Label appTitle = new Label("MedAssistant");
+        appTitle.setFont(Font.font("Segoe UI", 24));
+        appTitle.setTextFill(Color.WHITE);
+        navbar.getChildren().add(appTitle);
 
         // Title
-        JLabel title = new JLabel("Choose Your Role", SwingConstants.CENTER);
-        title.setFont(new Font("Segoe UI", Font.BOLD, 42));
-        title.setForeground(Color.WHITE);
-        getContentPane().add(title, BorderLayout.CENTER);
+        Label title = new Label("Choose Your Role");
+        title.setFont(Font.font("Segoe UI", 42));
+        title.setTextFill(Color.WHITE);
 
-        // Role Panel
-        JPanel rolePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 50));
-        rolePanel.setOpaque(false);
+        // Role Selection
+        HBox roleBox = new HBox(50);
+        roleBox.setAlignment(Pos.CENTER);
+        roleBox.setPadding(new Insets(50));
 
-        addRole(rolePanel, "Admin", "/assets/madmin.png");
-        addRole(rolePanel, "Doctor", "/assets/mdoctor.png");
-        addRole(rolePanel, "Staff", "/assets/mstaff.png");
-        addRole(rolePanel, "Patient", "/assets/mpatient.png");
+        addRole(roleBox, "Admin", "/assets/madmin.png");
+        addRole(roleBox, "Doctor", "/assets/mdoctor.png");
+        addRole(roleBox, "Staff", "/assets/mstaff.png");
+        addRole(roleBox, "Patient", "/assets/mpatient.png");
 
-        getContentPane().add(rolePanel, BorderLayout.SOUTH);
+        VBox mainLayout = new VBox(20, navbar, title, roleBox);
+        mainLayout.setAlignment(Pos.TOP_CENTER);
+        mainLayout.setBackground(new Background(new BackgroundFill(Color.MAROON, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        setVisible(true);
+        Scene scene = new Scene(mainLayout, 1000, 700);
+
+        primaryStage.setTitle("Select Role");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
-    private void addRole(JPanel panel, String role, String imagePath) {
-        ImageIcon icon = loadIcon(imagePath, 180, 240);
-        JLabel roleLabel = new JLabel(role, icon, JLabel.CENTER);
-        roleLabel.setVerticalTextPosition(JLabel.BOTTOM);
-        roleLabel.setHorizontalTextPosition(JLabel.CENTER);
-        roleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 24));
-        roleLabel.setForeground(Color.WHITE);
-        roleLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    private void addRole(HBox container, String role, String imagePath) {
+        VBox roleBox = new VBox(10);
+        roleBox.setAlignment(Pos.CENTER);
 
-        roleLabel.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                dispose();
-                new AuthScreen(role);
-            }
+        ImageView icon = new ImageView(new Image(getClass().getResourceAsStream(imagePath)));
+        icon.setFitWidth(180);
+        icon.setFitHeight(240);
+
+        Label roleLabel = new Label(role);
+        roleLabel.setFont(Font.font("Segoe UI", 24));
+        roleLabel.setTextFill(Color.WHITE);
+
+        roleBox.getChildren().addAll(icon, roleLabel);
+        roleBox.setOnMouseClicked((MouseEvent e) -> {
+            ((Stage) container.getScene().getWindow()).close();
+            new AuthScreen(role).start(new Stage());
         });
 
-        panel.add(roleLabel);
-    }
-
-    private ImageIcon loadIcon(String path, int width, int height) {
-        try {
-            java.net.URL imgURL = getClass().getResource(path);
-            if (imgURL != null) {
-                Image img = new ImageIcon(imgURL).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                return new ImageIcon(img);
-            }
-        } catch (Exception e) {
-            System.err.println("Error loading image: " + path);
-        }
-        return new ImageIcon();
-    }
-
-    // Custom JPanel for background image
-    class BackgroundPanel extends JPanel {
-        private Image background;
-
-        public BackgroundPanel(String imagePath) {
-            try {
-                java.net.URL url = getClass().getResource(imagePath);
-                if (url != null) {
-                    background = new ImageIcon(url).getImage();
-                }
-            } catch (Exception e) {
-                System.err.println("Background image load failed: " + imagePath);
-            }
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (background != null) {
-                g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new RoleSelection());
+        container.getChildren().add(roleBox);
     }
 }
