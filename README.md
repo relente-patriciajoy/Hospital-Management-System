@@ -21,7 +21,7 @@
 
 > Java
 
- <img src="https://img.shields.io/badge/FRONTEND-orange?style=for-the-badge&color=283593" />&nbsp;
+ <img src="https://img.shields.io/badge/UI-orange?style=for-the-badge&color=283593" />&nbsp;
 
 > Java FXML
 
